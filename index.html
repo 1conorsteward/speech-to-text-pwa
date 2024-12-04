@@ -1,0 +1,65 @@
+<!-- 
+===================================================================
+Conor Steward
+11/04/2024
+Speech To Text
+1conorsteward@gmail.com
+Issues: No known issues.
+
+File: index.html
+Description: This is the base HTML file for the Speech-to-Text PWA. 
+It defines the document structure, sets the meta information, 
+loads the React application, and specifies the root element where 
+the app will be rendered.
+===================================================================
+-->
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- 
+      Document Encoding
+      Specifies UTF-8 as the character encoding for the document. 
+      Ensures support for special characters and symbols.
+    -->
+    <meta charset="UTF-8" />
+
+    <!-- 
+      Favicon
+      Sets the favicon (icon displayed in the browser tab) for the application.
+      This example uses a `.webp` favicon. Replace `/favorite.io.webp` with 
+      the path to your actual favicon file.
+    -->
+    <link rel="icon" type="image/svg+xml" href="/speech-to-text-pwa/favorite.io.webp" />
+
+    <!-- 
+      Responsive Design
+      Sets the viewport for responsive design, ensuring the app scales properly 
+      across different devices and screen sizes.
+    -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- 
+      Page Title
+      Sets the title of the application, which appears in the browser tab.
+    -->
+    <title>Speech 2 Text</title>
+    <script type="module" crossorigin src="/speech-to-text-pwa/assets/index-DtHdUlJB.js"></script>
+    <link rel="stylesheet" crossorigin href="/speech-to-text-pwa/assets/index-B4UWEMXi.css">
+  </head>
+
+  <body>
+    <!-- 
+      Root Element
+      The root `<div>` where the React application will be mounted. 
+      React uses this element to render the application dynamically.
+    -->
+    <div id="root"></div>
+
+    <!-- 
+      Application Entry Point
+      Loads the main React application file (`main.jsx`) as a module. 
+      The module type allows modern JavaScript features to be used.
+    -->
+  </body>
+</html>
