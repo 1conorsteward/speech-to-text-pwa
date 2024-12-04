@@ -1,0 +1,107 @@
+/* 
+===================================================================
+Conor Steward
+11/04/2024
+Speech To Text
+1conorsteward@gmail.com
+Issues: No known issues.
+
+File: styles.css
+Description: This file provides the styles for the Speech-to-Text PWA. 
+It includes styling for the main application container, text area, 
+buttons, and scrollable box that displays saved text items.
+=================================================================== 
+*/
+
+/* 
+  Main Application Container
+  #root: Defines the main container for the application. It is centrally aligned 
+  with a modern grey background, rounded corners, and a subtle shadow for depth.
+*/
+#root {
+  max-width: 600px; /* Limits the width of the container for a clean, centered layout */
+  margin: 0 auto; /* Centers the container horizontally */
+  padding: 20px; /* Adds space inside the container */
+  background-color: #757575; /* Dark grey background for a sleek look */
+  border-radius: 10px; /* Rounded corners for a modern design */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth and polish */
+  text-align: center; /* Centers the content inside the container */
+}
+
+/* 
+  Text Area Styling
+  Styles the main text area where users can type or view transcribed text.
+*/
+textarea {
+  width: 100%; /* Makes the text area span the full width of the container */
+  height: 100px; /* Sets a fixed height for consistency */
+  padding: 10px; /* Adds inner spacing for better readability */
+  font-size: 16px; /* Ensures text is easily readable */
+  border: 1px solid #ccc; /* Light border for separation */
+  border-radius: 5px; /* Rounded corners for a modern look */
+  background-color: #615d5d; /* Slightly lighter grey for text contrast */
+  color: #ffffff; /* White text color for readability */
+}
+
+/* 
+  Button Container
+  .button-container: Aligns the buttons horizontally with space between them.
+*/
+.button-container {
+  margin: 20px 0; /* Adds vertical spacing above and below the buttons */
+  display: flex; /* Aligns buttons horizontally */
+  gap: 10px; /* Adds space between the buttons */
+  justify-content: center; /* Centers the buttons inside the container */
+}
+
+/* 
+  Button Styling
+  General styles for buttons, including hover effects for interactivity.
+*/
+button {
+  padding: 10px 20px; /* Adds space inside the buttons */
+  font-size: 16px; /* Sets the font size for button text */
+  color: #fff; /* White text for good contrast */
+  background-color: #615d5d; /* Matches the text area's background color */
+  border: none; /* Removes default border styling */
+  border-radius: 5px; /* Rounded corners for a consistent modern look */
+  cursor: pointer; /* Changes cursor to a pointer on hover for clarity */
+  transition: background-color 0.3s; /* Smooth transition effect for hover state */
+}
+
+button:hover {
+  background-color: #007bff; /* Blue background color on hover for visibility */
+}
+
+/* 
+  Scrollable Box Styling
+  .scrollable-box: Container for displaying saved text items. Supports scrolling when items exceed height.
+*/
+.scrollable-box {
+  margin-top: 20px; /* Adds spacing above the box */
+  width: 100%; /* Ensures it aligns with the width of the container */
+  max-height: 200px; /* Limits the height, enabling scrolling for overflow */
+  overflow-y: auto; /* Allows vertical scrolling when content exceeds height */
+  border: 1px solid #ccc; /* Adds a light border for separation */
+  border-radius: 5px; /* Rounded corners for a cohesive look */
+  background-color: #615d5d; /* Matches the text area's background color */
+  padding: 10px; /* Adds inner spacing for better content visibility */
+}
+
+/* 
+  Saved Text Items
+  .saved-text-item: Styles individual text entries in the scrollable box.
+*/
+.saved-text-item {
+  margin: 5px 0; /* Adds spacing between items */
+  padding: 5px; /* Adds inner spacing for readability */
+  background-color: #b2b1b1; /* Light grey for contrast against the scrollable box */
+  border-radius: 3px; /* Slightly rounded corners for consistency */
+  cursor: pointer; /* Changes cursor to a pointer on hover */
+  transition: background-color 0.2s ease, transform 0.2s ease; /* Smooth hover animations */
+}
+
+.saved-text-item:hover {
+  background-color: #e2e2e2; /* Lighter grey background on hover */
+  transform: translateY(-2px); /* Creates a "lift" effect on hover */
+}
