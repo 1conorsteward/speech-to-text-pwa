@@ -1,39 +1,34 @@
 /**
- * ===============================================================
+ * App.jsx
+ * A React application that allows users to record speech, convert it to text, save transcriptions, 
+ * and download them in various file formats (Word, Text, PDF, CSV). The application includes input validation, 
+ * error handling, and file-saving functionality for enhanced security and user experience.
+ * 
  * Conor Steward
- * 11/04/2024
+ * 12/09/2024
  * Speech To Text
  * 1conorsteward@gmail.com
  * Issues: No known issues.
- * 
- * File: App.jsx
- * Description: This file contains the React component for the 
- * Speech-to-Text Progressive Web Application (PWA). It manages 
- * user interactions, speech-to-text transcription, text saving, 
- * and the display of saved transcriptions.
- * ===============================================================
  */
 
 import { useState } from 'react';
+import { saveAs } from 'file-saver';
+import { Document, Packer, Paragraph } from 'docx';
+import jsPDF from 'jspdf';
 import './App.css';
+import DOMPurify from 'dompurify';
 
 function App() {
-  // State to track whether the app is recording speech
-  const [isRecording, setIsRecording] = useState(false);
-
-  // State to store the current text content in the text box
-  const [text, setText] = useState('');
-
-  // State to store a list of saved text entries
-  const [savedTexts, setSavedTexts] = useState([]);
-
-  // State to store the SpeechRecognition instance for speech-to-text functionality
-  const [recognition, setRecognition] = useState(null);
+  // State declarations
+  const [isRecording, setIsRecording] = useState(false); // Tracks whether recording is active
+  const [text, setText] = useState(''); // Stores the current text in the text box
+  const [savedTexts, setSavedTexts] = useState([]); // Stores saved text entries
+  const [recognition, setRecognition] = useState(null); // Stores the SpeechRecognition instance
+  const [fileType, setFileType] = useState('docx'); // Stores the selected file type for download
 
   /**
-   * handleRecord: Starts or stops the speech recognition process.
-   * - Initializes a new SpeechRecognition instance if not already created.
-   * - Captures speech input and processes it into text.
+   * @function handleRecord
+   * @description Starts or stops the speech recognition process and updates the `isRecording` state.
    */
   const handleRecord = () => {
     if (!isRecording) {
@@ -47,11 +42,11 @@ function App() {
         }
 
         const newRecognition = new SpeechRecognition();
-        newRecognition.continuous = true; // Keeps recording continuously
-        newRecognition.interimResults = false; // Finalize results only
+        newRecognition.continuous = true; // Enable continuous recognition
+        newRecognition.interimResults = false; // Only finalize complete sentences
         newRecognition.lang = 'en-US'; // Set language to US English
 
-        // Handles the results of the speech recognition process
+        // Event handler for processing speech recognition results
         newRecognition.onresult = (event) => {
           let finalTranscript = '';
           for (let i = event.resultIndex; i < event.results.length; i++) {
@@ -60,38 +55,33 @@ function App() {
               finalTranscript += replaceSpokenPunctuation(transcript);
             }
           }
-          // Appends the transcribed text to the existing text in the text box
-          setText((prevText) => prevText + finalTranscript);
+          setText((prevText) => prevText + finalTranscript); // Append new text
         };
 
-        // Handles errors in the speech recognition process
+        // Event handler for speech recognition errors
         newRecognition.onerror = (event) => {
           console.error('Speech recognition error:', event.error);
           alert('An error occurred: ' + event.error);
         };
 
-        // Store the SpeechRecognition instance
         setRecognition(newRecognition);
       }
 
-      // Start speech recognition
       recognition.start();
       console.log('Recording started...');
     } else {
-      // Stop speech recognition
       recognition.stop();
       console.log('Recording stopped.');
     }
 
-    // Toggle the recording state
     setIsRecording(!isRecording);
   };
 
   /**
-   * replaceSpokenPunctuation: Replaces spoken punctuation keywords 
-   * (e.g., "comma", "period") with their respective symbols.
-   * @param {string} transcript - The spoken text to process.
-   * @returns {string} - The processed text with punctuation symbols.
+   * @function replaceSpokenPunctuation
+   * @description Replaces spoken punctuation with actual punctuation symbols in the transcribed text.
+   * @param {string} transcript - The text received from speech recognition.
+   * @returns {string} - Processed text with punctuation replaced.
    */
   const replaceSpokenPunctuation = (transcript) => {
     return transcript
@@ -105,36 +95,156 @@ function App() {
   };
 
   /**
-   * handleSave: Saves the current text in the text box to the savedTexts array.
-   * - Clears the text box after saving.
+   * @function validateText
+   * @description Validates user input to ensure it meets the app's requirements.
+   * @param {string} text - The input text to validate.
+   * @returns {boolean} - Whether the input text is valid.
+   */
+  const validateText = (text) => {
+    if (text.length > 10000) return false; // Limit input length
+    return /^[\w\s.,!?'"-]*$/.test(text); // Allow only safe characters
+  };
+
+  /**
+   * @function sanitizeText
+   * @description Sanitizes user input to prevent malicious code injection.
+   * @param {string} text - The input text to sanitize.
+   * @returns {string} - Sanitized text.
+   */
+  const sanitizeText = (text) => DOMPurify.sanitize(text);
+
+  /**
+   * @function handleSave
+   * @description Saves the current text to the savedTexts array if valid.
    */
   const handleSave = () => {
-    if (text.trim() !== '') {
-      // Add the current text to the saved texts list
-      setSavedTexts((prevSavedTexts) => [...prevSavedTexts, text.trim()]);
-      // Clear the text box
+    if (validateText(text)) {
+      setSavedTexts((prevSavedTexts) => [...prevSavedTexts, sanitizeText(text)]);
       setText('');
+    } else {
+      alert('Invalid input detected.');
     }
   };
 
   /**
-   * handleSavedTextClick: Handles the click on a saved text item.
-   * - Repopulates the text box with the clicked text.
-   * - Removes the clicked text from the savedTexts list to prevent duplicates.
-   * @param {string} savedText - The saved text item clicked by the user.
+   * @function handleSavedTextClick
+   * @description Handles user interaction with saved texts.
+   * @param {string} savedText - The clicked saved text.
    */
   const handleSavedTextClick = (savedText) => {
-    setText(savedText); // Repopulate the text box with the saved text
+    setText(savedText); // Repopulate the text box
     setSavedTexts((prevSavedTexts) =>
       prevSavedTexts.filter((item) => item !== savedText)
-    ); // Remove the clicked item from the saved texts list
+    ); // Remove the clicked item from saved texts
+  };
+
+  /**
+   * @function handleDownload
+   * @description Initiates the download process for the selected file type.
+   */
+  const handleDownload = () => {
+    if (savedTexts.length === 0) {
+      alert('No saved texts to download.');
+      return;
+    }
+
+    switch (fileType) {
+      case 'docx':
+        downloadAsDocx();
+        break;
+      case 'txt':
+        downloadAsTxt();
+        break;
+      case 'pdf':
+        downloadAsPdf();
+        break;
+      case 'csv':
+        downloadAsCsv();
+        break;
+      default:
+        console.error('Unsupported file type');
+    }
+  };
+
+  /**
+   * @function downloadAsDocx
+   * @description Generates and downloads a Word document containing the saved texts.
+   */
+  const downloadAsDocx = () => {
+    try {
+      const doc = new Document({
+        sections: [
+          {
+            children: savedTexts.map((text) => new Paragraph(text)),
+          },
+        ],
+      });
+
+      Packer.toBlob(doc).then((blob) => {
+        saveAs(blob, 'saved_texts.docx');
+      });
+    } catch (error) {
+      alert('Failed to generate the Word file. Please try again.');
+      console.error('Error generating Word file:', error);
+    }
+  };
+
+  /**
+   * @function downloadAsTxt
+   * @description Generates and downloads a plain text file containing the saved texts.
+   */
+  const downloadAsTxt = () => {
+    try {
+      const blob = new Blob([savedTexts.join('\n')], { type: 'text/plain' });
+      saveAs(blob, 'saved_texts.txt');
+    } catch (error) {
+      alert('Failed to generate the text file. Please try again.');
+      console.error('Error generating text file:', error);
+    }
+  };
+
+  /**
+   * @function downloadAsPdf
+   * @description Generates and downloads a PDF file containing the saved texts.
+   */
+  const downloadAsPdf = () => {
+    try {
+      const doc = new jsPDF();
+      savedTexts.forEach((text, index) => {
+        doc.text(text, 10, 10 + index * 10);
+      });
+      doc.save('saved_texts.pdf');
+    } catch (error) {
+      alert('Failed to generate the PDF file. Please try again.');
+      console.error('Error generating PDF file:', error);
+    }
+  };
+
+  /**
+   * @function downloadAsCsv
+   * @description Generates and downloads a CSV file containing the saved texts.
+   */
+  const downloadAsCsv = () => {
+    try {
+      const csvContent = 'data:text/csv;charset=utf-8,' + savedTexts.join('\n');
+      const encodedUri = encodeURI(csvContent);
+      const link = document.createElement('a');
+      link.setAttribute('href', encodedUri);
+      link.setAttribute('download', 'saved_texts.csv');
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    } catch (error) {
+      alert('Failed to generate the CSV file. Please try again.');
+      console.error('Error generating CSV file:', error);
+    }
   };
 
   return (
     <div id="root">
       <h1>Speech to Text</h1>
 
-      {/* Text Area */}
+      {/* Text Box */}
       <textarea
         placeholder="Type here or view transcription..."
         value={text} // Controlled input value
@@ -164,6 +274,21 @@ function App() {
             </p>
           ))
         )}
+      </div>
+
+      {/* Dropdown and Download Button */}
+      <div className="download-container">
+        <select
+          value={fileType}
+          onChange={(e) => setFileType(e.target.value)}
+          className="file-type-dropdown"
+        >
+          <option value="docx">Word (.docx)</option>
+          <option value="txt">Text (.txt)</option>
+          <option value="pdf">PDF (.pdf)</option>
+          <option value="csv">CSV (.csv)</option>
+        </select>
+        <button onClick={handleDownload}>Download</button>
       </div>
     </div>
   );

@@ -1,7 +1,7 @@
 /* 
 ===================================================================
 Conor Steward
-11/04/2024
+12/09/2024
 Speech To Text
 1conorsteward@gmail.com
 Issues: No known issues.
@@ -105,3 +105,37 @@ button:hover {
   background-color: #e2e2e2; /* Lighter grey background on hover */
   transform: translateY(-2px); /* Creates a "lift" effect on hover */
 }
+/* 
+  Download Container
+  .download-container: Styles the container holding the dropdown and download button.
+  - Provides a layout that centers the dropdown and button horizontally.
+  - Adds spacing between the dropdown and button for a clean appearance.
+*/
+.download-container {
+  margin-top: 20px; /* Adds space above the container to separate it from other elements */
+  display: flex; /* Enables a flexbox layout for horizontal alignment */
+  justify-content: center; /* Centers the dropdown and button horizontally */
+  gap: 10px; /* Adds a 10px gap between the dropdown and button */
+  align-items: center; /* Aligns items vertically in the center */
+}
+/* 
+  File Type Dropdown
+  .file-type-dropdown: Styles the dropdown menu for selecting the file type.
+  - Updated to match the grey button style.
+*/
+.file-type-dropdown {
+  padding: 10px; /* Adds inner spacing for comfortable interaction */
+  font-size: 16px; /* Sets a readable font size for dropdown options */
+  border-radius: 5px; /* Rounds the corners for a modern look */
+  border: 1px solid #ccc; /* Adds a subtle border for definition */
+  background-color: #615d5d; /* Matches the grey color of the buttons */
+  color: #ffffff; /* Sets the text color to white for readability */
+  cursor: pointer; /* Changes the cursor to pointer on hover */
+  transition: background-color 0.3s; /* Adds a smooth transition effect */
+}
+
+.file-type-dropdown:hover {
+  background-color: #007bff; /* Blue background color on hover, like the buttons */
+}
+
+

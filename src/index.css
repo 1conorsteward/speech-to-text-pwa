@@ -1,68 +1,109 @@
+/**
+ * ===============================================================
+ * Conor Steward
+ * 12/09/2024
+ * Speech To Text
+ * 1conorsteward@gmail.com
+ * Issues: No known issues.
+ *
+ * File: index.css
+ * Description: This file contains global styles for the application. 
+ * It includes basic typography, default link styles, body layout, 
+ * and button styling. The styles are designed to support both light 
+ * and dark themes using the `prefers-color-scheme` media query.
+ * ===============================================================
+ */
+
+/* 
+  Root Styles
+  :root: Defines global variables and base styles for typography, 
+  color scheme, and rendering optimization.
+*/
 :root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif; /* Default font stack */
+  line-height: 1.5; /* Improves readability by increasing line spacing */
+  font-weight: 400; /* Default font weight */
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  color-scheme: light dark; /* Supports light and dark color schemes */
+  color: rgba(255, 255, 255, 0.87); /* Default text color for dark mode */
+  background-color: #242424; /* Dark background for dark mode */
 
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  font-synthesis: none; /* Disables font synthesis for a consistent appearance */
+  text-rendering: optimizeLegibility; /* Improves text rendering */
+  -webkit-font-smoothing: antialiased; /* Enhances text clarity on macOS */
+  -moz-osx-font-smoothing: grayscale; /* Optimizes text appearance on macOS */
 }
 
+/* 
+  Link Styles
+  a: Provides a default style for links, including color and hover effects.
+*/
 a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
+  font-weight: 500; /* Slightly bold font for emphasis */
+  color: #646cff; /* Default link color */
+  text-decoration: inherit; /* Inherits text decoration (e.g., underline) */
 }
 a:hover {
-  color: #535bf2;
+  color: #535bf2; /* Darker blue for hover state */
 }
 
+/* 
+  Body Styles
+  body: Centers content within the viewport and applies default margin and layout.
+*/
 body {
-  margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
+  margin: 0; /* Removes default browser margin */
+  display: flex; /* Enables flexbox for centering */
+  place-items: center; /* Centers content vertically and horizontally */
+  min-width: 320px; /* Ensures proper layout on small screens */
+  min-height: 100vh; /* Ensures the body spans the full viewport height */
 }
 
+/* 
+  Header Styles
+  h1: Sets a large font size and balanced line height for headings.
+*/
 h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
+  font-size: 3.2em; /* Large font size for emphasis */
+  line-height: 1.1; /* Compact line height for headings */
 }
 
+/* 
+  Button Styles
+  button: Provides a modern design for buttons, including hover and focus effects.
+*/
 button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
+  border-radius: 8px; /* Rounded corners for a modern look */
+  border: 1px solid transparent; /* Default border with transparent color */
+  padding: 0.6em 1.2em; /* Inner spacing for comfortable interaction */
+  font-size: 1em; /* Ensures consistent font size */
+  font-weight: 500; /* Medium font weight for visibility */
+  font-family: inherit; /* Matches the global font family */
+  background-color: #1a1a1a; /* Dark background for dark mode */
+  cursor: pointer; /* Indicates interactivity */
+  transition: border-color 0.25s; /* Smooth transition for hover effect */
 }
 button:hover {
-  border-color: #646cff;
+  border-color: #646cff; /* Blue border on hover */
 }
 button:focus,
 button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+  outline: 4px auto -webkit-focus-ring-color; /* Adds focus ring for accessibility */
 }
 
+/* 
+  Light Theme Styles
+  @media (prefers-color-scheme: light): Overrides root and other styles for light mode.
+*/
 @media (prefers-color-scheme: light) {
   :root {
-    color: #213547;
-    background-color: #ffffff;
+    color: #213547; /* Default text color for light mode */
+    background-color: #ffffff; /* White background for light mode */
   }
   a:hover {
-    color: #747bff;
+    color: #747bff; /* Softer blue for link hover in light mode */
   }
   button {
-    background-color: #f9f9f9;
+    background-color: #f9f9f9; /* Light background for buttons in light mode */
   }
 }
