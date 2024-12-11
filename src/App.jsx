@@ -30,22 +30,34 @@ function App() {
    * @function handleRecord
    * @description Starts or stops the speech recognition process and updates the `isRecording` state.
    */
-  const handleRecord = () => {
-    if (!isRecording) {
-      if (!recognition) {
+  const handleRecord = async () => {
+    try {
+      if (!isRecording) {
+        // Request microphone access
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        console.log('Microphone access granted:', stream);
+  
+        // Stop and reinitialize SpeechRecognition instance if needed
+        if (recognition) {
+          recognition.stop();
+          console.log('Reinitializing SpeechRecognition instance...');
+        }
+  
+        // Check for SpeechRecognition support
         const SpeechRecognition =
           window.SpeechRecognition || window.webkitSpeechRecognition;
-
+  
         if (!SpeechRecognition) {
           alert('Speech recognition is not supported in this browser.');
           return;
         }
-
+  
+        // Create a new SpeechRecognition instance
         const newRecognition = new SpeechRecognition();
         newRecognition.continuous = true; // Enable continuous recognition
         newRecognition.interimResults = false; // Only finalize complete sentences
         newRecognition.lang = 'en-US'; // Set language to US English
-
+  
         // Event handler for processing speech recognition results
         newRecognition.onresult = (event) => {
           let finalTranscript = '';
@@ -57,25 +69,39 @@ function App() {
           }
           setText((prevText) => prevText + finalTranscript); // Append new text
         };
-
+  
         // Event handler for speech recognition errors
         newRecognition.onerror = (event) => {
           console.error('Speech recognition error:', event.error);
           alert('An error occurred: ' + event.error);
         };
-
+  
+        // Event handler for microphone errors
+        newRecognition.onaudioend = () => {
+          console.log('Microphone audio ended.');
+        };
+  
+        // Save and start the SpeechRecognition instance
         setRecognition(newRecognition);
+        newRecognition.start();
+        console.log('Recording started...');
+      } else {
+        // Stop SpeechRecognition
+        if (recognition) {
+          recognition.stop();
+          console.log('Recording stopped.');
+        }
       }
-
-      recognition.start();
-      console.log('Recording started...');
-    } else {
-      recognition.stop();
-      console.log('Recording stopped.');
+  
+      // Toggle recording state
+      setIsRecording(!isRecording);
+    } catch (error) {
+      console.error('Error accessing microphone or initializing SpeechRecognition:', error);
+      alert(
+        'Unable to access the microphone. Please ensure microphone permissions are enabled in your browser settings.'
+      );
     }
-
-    setIsRecording(!isRecording);
-  };
+  };  
 
   /**
    * @function replaceSpokenPunctuation
