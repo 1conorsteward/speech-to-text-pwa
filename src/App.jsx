@@ -67,7 +67,9 @@ function App() {
               finalTranscript += replaceSpokenPunctuation(transcript);
             }
           }
-          setText((prevText) => prevText + finalTranscript); // Append new text
+          setText((prevText) => {
+            return prevText.trimEnd() + ' ' + finalTranscript.trimStart();
+           });
         };
   
         // Event handler for speech recognition errors
